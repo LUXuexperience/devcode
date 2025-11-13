@@ -1,0 +1,5 @@
+
+{
+  "name": "Forest Fire Monitoring Dashboard",
+  "description": "A real-time dashboard for monitoring forest fires using camera feeds and alerts on an interactive map. It includes user authentication and role-based access."
+}
