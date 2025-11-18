@@ -149,12 +149,21 @@ export const PieChartPlaceholder: React.FC<{ data: PieChartData[] }> = ({ data }
     let cumulativeOffset = 0;
 
     return (
-        <svg width="100%" height="100%" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+        // CLASES DE COLOR APLICADAS AQUÍ: text-white en Dark Mode, light:text-slate-900 en Light Mode
+        <svg 
+            width="100%" 
+            height="100%" 
+            viewBox="0 0 200 200" 
+            preserveAspectRatio="xMidYMid meet"
+            className="text-white light:text-slate-900" 
+        >
             {/* Círculo de fondo (para el centro) */}
             <circle cx={CX} cy={CY} r={R + STROKE_WIDTH / 2 + 5} fill="transparent" stroke="#475569" className="light:stroke-gray-200" strokeWidth="1" />
+            
+            {/* NOTA: El fondo central es oscuro (#1e293b) en Dark Mode y blanco (light:fill-white) en Light Mode */}
             <circle cx={CX} cy={CY} r={R - STROKE_WIDTH / 2} fill="#1e293b" className="light:fill-white" />
             
-            {/* Dibujar segmentos */}
+            {/* Dibujar segmentos (sin cambios) */}
             {data.map((item, index) => {
                 const percentage = item.value / total;
                 const dasharray = `${percentage * CIRCUMFERENCE} ${CIRCUMFERENCE}`;
@@ -178,14 +187,6 @@ export const PieChartPlaceholder: React.FC<{ data: PieChartData[] }> = ({ data }
                 cumulativeOffset += percentage;
                 return segment;
             })}
-
-            {/* Total en el centro */}
-            <text x={CX} y={CY - 10} textAnchor="middle" dominantBaseline="middle" fontSize="24" fontWeight="bold" fill="#f8fafc" className="light:fill-gray-900">
-                {total}
-            </text>
-            <text x={CX} y={CY + 15} textAnchor="middle" dominantBaseline="middle" fontSize="10" fill="#94a3b8" className="light:fill-gray-600">
-                Total Alertas
-            </text>
 
         </svg>
     );
