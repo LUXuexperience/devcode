@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { User, UserRole, Alert } from '../types';
 import { Bell, LogOut, Mountain, Settings, User as UserIcon, BarChartHorizontalBig, Video, FileText, Users, Home, BookOpen, Sun, Moon } from 'lucide-react';
+import CustomTooltip from './customTooltip'; // <--- IMPORTAMOS EL NUEVO COMPONENTE
 
 interface HeaderProps {
   user?: User;
@@ -149,31 +150,43 @@ const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center space-x-1 md:space-x-3">
 
         {/* Botones de Navegación */}
-        <button onClick={onNavigateToDashboard} className={navBtnStyle} title="Inicio">
-          <Home className="h-6 w-6" />
-        </button>
+        <CustomTooltip content="Inicio" >
+          <button onClick={onNavigateToDashboard} className={navBtnStyle}>
+            <Home className="h-6 w-6" />
+          </button>
+        </CustomTooltip>
 
-        <button onClick={onNavigateToStatistics} className={navBtnStyle} title="Estadísticas">
-          <BarChartHorizontalBig className="h-6 w-6" />
-        </button>
+        <CustomTooltip content="Estadísticas" >
+          <button onClick={onNavigateToStatistics} className={navBtnStyle}>
+            <BarChartHorizontalBig className="h-6 w-6" />
+          </button>
+        </CustomTooltip>
 
         {!isViewer && (
           <>
-            <button onClick={onNavigateToCameraManagement} className={navBtnStyle} title="Cámaras">
-              <Video className="h-6 w-6" />
-            </button>
+            <CustomTooltip content="Cámaras" >
+              <button onClick={onNavigateToCameraManagement} className={navBtnStyle}>
+                <Video className="h-6 w-6" />
+              </button>
+            </CustomTooltip>
 
-            <button onClick={onNavigateToReports} className={navBtnStyle} title="Reportes">
-              <FileText className="h-6 w-6" />
-            </button>
+            <CustomTooltip content="Reportes" >
+              <button onClick={onNavigateToReports} className={navBtnStyle}>
+                <FileText className="h-6 w-6" />
+              </button>
+            </CustomTooltip>
 
-            <button onClick={onNavigateToUserManagement} className={navBtnStyle} title="Usuarios">
-              <Users className="h-6 w-6" />
-            </button>
+            <CustomTooltip content="Usuarios" >
+              <button onClick={onNavigateToUserManagement} className={navBtnStyle}>
+                <Users className="h-6 w-6" />
+              </button>
+            </CustomTooltip>
 
-            <button onClick={onOpenAuditLog} className={navBtnStyle} title="Auditoría">
-              <BookOpen className="h-6 w-6" />
-            </button>
+            <CustomTooltip content="Auditoría">
+              <button onClick={onOpenAuditLog} className={navBtnStyle}>
+                <BookOpen className="h-6 w-6" />
+              </button>
+            </CustomTooltip>
           </>
         )}
 
@@ -182,17 +195,19 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* NOTIFICACIONES */}
         <div className="relative" ref={notificationDropdownRef}>
-          <button 
-            onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)} 
-            className={`${navBtnStyle} relative`}
-          >
-            <Bell className="h-6 w-6" />
-            {alertCount > 0 && (
-              <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white dark:ring-slate-800">
-                {alertCount}
-              </span>
-            )}
-          </button>
+          <CustomTooltip content="Notificaciones"> {/* <--- Usando CustomTooltip */}
+            <button 
+              onClick={() => setNotificationDropdownOpen(!notificationDropdownOpen)} 
+              className={`${navBtnStyle} relative`}
+            >
+              <Bell className="h-6 w-6" />
+              {alertCount > 0 && (
+                <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-white dark:ring-slate-800">
+                  {alertCount}
+                </span>
+              )}
+            </button>
+          </CustomTooltip>
 
           {notificationDropdownOpen && (
             <div className="absolute right-0 mt-3 w-80 rounded-xl shadow-2xl overflow-hidden ring-1 ring-black ring-opacity-5
@@ -235,16 +250,18 @@ const Header: React.FC<HeaderProps> = ({
 
         {/* USUARIO Y MENÚ */}
         <div className="relative" ref={userDropdownRef}>
-          <button 
-            onClick={() => setUserDropdownOpen(!userDropdownOpen)} 
-            className="flex items-center focus:outline-none ml-1 transition-transform active:scale-95"
-          >
-            <img 
-                src={user.avatarUrl} 
-                alt="Perfil" 
-                className="h-9 w-9 rounded-full object-cover border-2 border-slate-100 dark:border-slate-600 shadow-sm hover:border-emerald-500 transition-colors"
-            />
-          </button>
+          <CustomTooltip content="Menú de Usuario" > {/* <--- Usando CustomTooltip */}
+            <button 
+              onClick={() => setUserDropdownOpen(!userDropdownOpen)} 
+              className="flex items-center focus:outline-none ml-1 transition-transform active:scale-95"
+            >
+              <img 
+                  src={user.avatarUrl} 
+                  alt="Perfil" 
+                  className="h-9 w-9 rounded-full object-cover border-2 border-slate-100 dark:border-slate-600 shadow-sm hover:border-emerald-500 transition-colors"
+              />
+            </button>
+          </CustomTooltip>
 
           {userDropdownOpen && (
             <div className="absolute right-0 mt-3 w-64 rounded-xl shadow-2xl overflow-hidden ring-1 ring-black ring-opacity-5 z-50
