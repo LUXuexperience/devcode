@@ -15,31 +15,35 @@ interface LineChartData {
 }
 
 export const LineChartPlaceholder: React.FC<{ data: LineChartData[] }> = ({ data }) => {
-    if (!data || data.length === 0) return <div className="text-slate-500 light:text-gray-400 text-center p-4">Sin datos para mostrar.</div>;
+    if (!data || data.length === 0) return <div className="text-slate-500 dark:text-slate-400 text-center p-4">Sin datos para mostrar.</div>;
 
     const values = data.map(d => d.value);
-    const maxValue = Math.max(...values, 10); // Asegurar un mínimo de 10
+    const maxValue = Math.max(...values, 10);
     const scaleY = (value: number) => SVG_HEIGHT - PADDING - (value / maxValue) * (SVG_HEIGHT - 2 * PADDING);
     const scaleX = (index: number) => PADDING + index * ((SVG_WIDTH - 2 * PADDING) / (data.length - 1));
 
-    // Generar la ruta SVG (path)
     const pathD = data.map((d, i) => {
         const x = scaleX(i);
         const y = scaleY(d.value);
         return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
     }).join(' ');
 
-    // Generar el área de relleno (area path)
     const areaD = pathD + ` L ${scaleX(data.length - 1)} ${SVG_HEIGHT - PADDING} L ${scaleX(0)} ${SVG_HEIGHT - PADDING} Z`;
 
     return (
-        <svg width="100%" height="100%" viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`} preserveAspectRatio="xMidYMid meet" className="text-emerald-500 light:text-emerald-600">
-            {/* Eje X (Horizontal) */}
-            <line x1={PADDING} y1={SVG_HEIGHT - PADDING} x2={SVG_WIDTH - PADDING} y2={SVG_HEIGHT - PADDING} stroke="#475569" className="light:stroke-gray-300" strokeWidth="1" />
+        <svg width="100%" height="100%" viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`} preserveAspectRatio="xMidYMid meet" className="text-emerald-600 dark:text-emerald-500 transition-colors duration-300">
+            {/* Eje X */}
+            <line 
+                x1={PADDING} y1={SVG_HEIGHT - PADDING} x2={SVG_WIDTH - PADDING} y2={SVG_HEIGHT - PADDING} 
+                strokeWidth="1" 
+                className="stroke-slate-300 dark:stroke-slate-600 transition-colors"
+            />
             
             {/* Etiquetas X */}
             {data.map((d, i) => (
-                <text key={i} x={scaleX(i)} y={SVG_HEIGHT - PADDING / 2} textAnchor="middle" fontSize="10" fill="#94a3b8" className="light:fill-gray-600">
+                <text key={i} x={scaleX(i)} y={SVG_HEIGHT - PADDING / 2} textAnchor="middle" fontSize="10" 
+                    className="fill-slate-500 dark:fill-slate-400 transition-colors"
+                >
                     {d.day}
                 </text>
             ))}
@@ -57,9 +61,9 @@ export const LineChartPlaceholder: React.FC<{ data: LineChartData[] }> = ({ data
             {/* Línea */}
             <path d={pathD} stroke="currentColor" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             
-            {/* Puntos de Datos */}
+            {/* Puntos */}
             {data.map((d, i) => (
-                <circle key={i} cx={scaleX(i)} cy={scaleY(d.value)} r="3" fill="currentColor" className="shadow-lg" />
+                <circle key={i} cx={scaleX(i)} cy={scaleY(d.value)} r="3" fill="currentColor" />
             ))}
         </svg>
     );
@@ -75,9 +79,9 @@ interface BarChartData {
 }
 
 export const BarChartPlaceholder: React.FC<{ data: BarChartData[] }> = ({ data }) => {
-    if (!data || data.length === 0) return <div className="text-slate-500 light:text-gray-400 text-center p-4">Sin datos para mostrar.</div>;
+    if (!data || data.length === 0) return <div className="text-slate-500 dark:text-slate-400 text-center p-4">Sin datos para mostrar.</div>;
 
-    const top6 = data.slice(0, 6); // Mostrar solo el Top 6
+    const top6 = data.slice(0, 6);
     const values = top6.map(d => d.count);
     const maxValue = Math.max(...values, 10);
     const numBars = top6.length;
@@ -90,7 +94,11 @@ export const BarChartPlaceholder: React.FC<{ data: BarChartData[] }> = ({ data }
     return (
         <svg width="100%" height="100%" viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`} preserveAspectRatio="xMidYMid meet">
             {/* Eje X */}
-            <line x1={PADDING} y1={SVG_HEIGHT - PADDING} x2={SVG_WIDTH - PADDING} y2={SVG_HEIGHT - PADDING} stroke="#475569" className="light:stroke-gray-300" strokeWidth="1" />
+            <line 
+                x1={PADDING} y1={SVG_HEIGHT - PADDING} x2={SVG_WIDTH - PADDING} y2={SVG_HEIGHT - PADDING} 
+                strokeWidth="1" 
+                className="stroke-slate-300 dark:stroke-slate-600 transition-colors"
+            />
 
             {top6.map((d, i) => {
                 const height = scaleY(d.count);
@@ -99,22 +107,21 @@ export const BarChartPlaceholder: React.FC<{ data: BarChartData[] }> = ({ data }
 
                 return (
                     <g key={d.name}>
-                        {/* Barra */}
+                        {/* Barra: Cyan en ambos modos, ligeramente ajustado */}
                         <rect 
-                            x={x} 
-                            y={y} 
-                            width={barWidth} 
-                            height={height} 
-                            rx="4" 
-                            fill="#06b6d4" // Tailwind cyan-500
-                            className="text-cyan-500" 
+                            x={x} y={y} width={barWidth} height={height} rx="4" 
+                            className="fill-cyan-600 dark:fill-cyan-500 transition-colors"
                         />
-                        {/* Etiqueta de la base */}
-                        <text x={x + barWidth / 2} y={SVG_HEIGHT - PADDING / 2} textAnchor="middle" fontSize="10" fill="#94a3b8" className="light:fill-gray-600">
+                        {/* Etiqueta Base */}
+                        <text x={x + barWidth / 2} y={SVG_HEIGHT - PADDING / 2} textAnchor="middle" fontSize="10" 
+                            className="fill-slate-500 dark:fill-slate-400 transition-colors"
+                        >
                             {d.name.substring(0, 8)}...
                         </text>
-                        {/* Etiqueta del valor */}
-                         <text x={x + barWidth / 2} y={y - 5} textAnchor="middle" fontSize="10" fill="#94a3b8" className="light:fill-gray-700">
+                        {/* Valor */}
+                         <text x={x + barWidth / 2} y={y - 5} textAnchor="middle" fontSize="10" 
+                            className="fill-slate-600 dark:fill-slate-300 transition-colors font-semibold"
+                        >
                             {d.count}
                         </text>
                     </g>
@@ -135,10 +142,10 @@ interface PieChartData {
 }
 
 export const PieChartPlaceholder: React.FC<{ data: PieChartData[] }> = ({ data }) => {
-    if (!data || data.length === 0) return <div className="text-slate-500 light:text-gray-400 text-center p-4">Sin datos para mostrar.</div>;
+    if (!data || data.length === 0) return <div className="text-slate-500 dark:text-slate-400 text-center p-4">Sin datos para mostrar.</div>;
     
     const total = data.reduce((sum, item) => sum + item.value, 0);
-    if (total === 0) return <div className="text-slate-500 light:text-gray-400 text-center p-4">Sin datos de confirmación.</div>;
+    if (total === 0) return <div className="text-slate-500 dark:text-slate-400 text-center p-4">Sin datos de confirmación.</div>;
 
     const R = 80;
     const CX = 100;
@@ -149,21 +156,23 @@ export const PieChartPlaceholder: React.FC<{ data: PieChartData[] }> = ({ data }
     let cumulativeOffset = 0;
 
     return (
-        // CLASES DE COLOR APLICADAS AQUÍ: text-white en Dark Mode, light:text-slate-900 en Light Mode
-        <svg 
-            width="100%" 
-            height="100%" 
-            viewBox="0 0 200 200" 
-            preserveAspectRatio="xMidYMid meet"
-            className="text-white light:text-slate-900" 
-        >
-            {/* Círculo de fondo (para el centro) */}
-            <circle cx={CX} cy={CY} r={R + STROKE_WIDTH / 2 + 5} fill="transparent" stroke="#475569" className="light:stroke-gray-200" strokeWidth="1" />
+        <svg width="100%" height="100%" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+            {/* Guía Circular Externa (opcional, sutil) */}
+            <circle 
+                cx={CX} cy={CY} r={R + STROKE_WIDTH / 2 + 2} 
+                fill="transparent" strokeWidth="1" 
+                className="stroke-slate-200 dark:stroke-slate-700 transition-colors"
+            />
             
-            {/* NOTA: El fondo central es oscuro (#1e293b) en Dark Mode y blanco (light:fill-white) en Light Mode */}
-            <circle cx={CX} cy={CY} r={R - STROKE_WIDTH / 2} fill="#1e293b" className="light:fill-white" />
+            {/* EL TRUCO DEL DONUT: 
+                El círculo central debe coincidir con el fondo de la tarjeta contenedora.
+                White en modo claro, Slate-800 en modo oscuro.
+            */}
+            <circle 
+                cx={CX} cy={CY} r={R - STROKE_WIDTH / 2} 
+                className="fill-white dark:fill-slate-800 transition-colors duration-300" 
+            />
             
-            {/* Dibujar segmentos (sin cambios) */}
             {data.map((item, index) => {
                 const percentage = item.value / total;
                 const dasharray = `${percentage * CIRCUMFERENCE} ${CIRCUMFERENCE}`;
@@ -172,11 +181,9 @@ export const PieChartPlaceholder: React.FC<{ data: PieChartData[] }> = ({ data }
                 const segment = (
                     <circle 
                         key={index}
-                        cx={CX} 
-                        cy={CY} 
-                        r={R} 
+                        cx={CX} cy={CY} r={R} 
                         fill="transparent" 
-                        stroke={item.color} 
+                        stroke={item.color} // El color viene de props, asegurarse que el padre envíe colores compatibles
                         strokeWidth={STROKE_WIDTH} 
                         strokeDasharray={dasharray} 
                         transform={`rotate(${rotation} ${CX} ${CY})`}
@@ -187,6 +194,13 @@ export const PieChartPlaceholder: React.FC<{ data: PieChartData[] }> = ({ data }
                 cumulativeOffset += percentage;
                 return segment;
             })}
+
+            <text x={CX} y={CY} dy="0.3em" textAnchor="middle" className="text-2xl font-bold fill-slate-700 dark:fill-white transition-colors pointer-events-none">
+                {total}
+            </text>
+            <text x={CX} y={CY + 15} dy="0.3em" textAnchor="middle" className="text-[10px] font-medium fill-slate-400 dark:fill-slate-400 transition-colors pointer-events-none">
+                TOTAL
+            </text>
 
         </svg>
     );

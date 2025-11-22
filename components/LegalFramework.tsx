@@ -8,7 +8,7 @@ const LegalFramework: React.FC = () => {
 
     return (
         <div className="prose prose-invert prose-sm max-w-none">
-            <h2 className={sectionTitleClass}>📋 Marco Legal Aplicable en México</h2>
+            <h2 className={sectionTitleClass}> Marco Legal Aplicable en México</h2>
             <p className={textClass}>
                 La operación de este sistema de monitoreo se adhiere estrictamente a las siguientes leyes y normativas vigentes en México, así como a estándares internacionales relevantes para garantizar la seguridad, privacidad y el correcto manejo de la información.
             </p>
